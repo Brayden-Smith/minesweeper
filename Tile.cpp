@@ -75,9 +75,18 @@ void Tile::onClickRight() {
 }
 
 void Tile::onClickLeft() {
+    Toolbox& toolbox = Toolbox::getInstance();
     if (state == HIDDEN)
     {
-        this->setState(Tile::State (0));
+        //if the mine at this location exists then it goes into exploded state
+        if (toolbox.mines[sprite.getPosition().x /32][sprite.getPosition().y /32].doesExist()) {
+            this->setState(EXPLODED);
+            toolbox.mines[sprite.getPosition().x /32][sprite.getPosition().y /32].setColor(sf::Color(255,255,255,255));
+        }
+        else
+        {
+            this->setState(REVEALED);
+        }
     }
 }
 

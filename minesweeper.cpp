@@ -2,7 +2,7 @@
 
 int launch() {
 
-    //recreates the window
+    //recreates the window and creates the gameState
     Toolbox& Toolbox = Toolbox::getInstance();
     Toolbox.window.create(sf::VideoMode(800,600), "P4 - Minesweeper, <Brayden Smith>");
 
@@ -65,10 +65,11 @@ int launch() {
 }
 
 sf::Texture texture;
-
 //resets all objects, generates a default game state and turns off debug mode
 void restart() {
     Toolbox& toolbox = Toolbox::getInstance();
+
+    //debug mode back to false
     if (getDebugMode()) {
         toggleDebugMode();
     }
@@ -78,7 +79,7 @@ void restart() {
     toolbox.buttons[1]->getSprite()->setTexture(texture);
 
     //resets gamestate
-    //toolbox.gameState = &newGameState;
+    //toolbox.gameState = &restartGame;
 }
 
 //renders the current game state
@@ -89,14 +90,15 @@ void render() {
         Toolbox.window.draw(*Toolbox.buttons[i]->getSprite());
     }
 
-    for (int i = 0; i < 25; i ++) {
-        for (int j = 0; j < 16; j ++) {
+    sf::Vector2i dimensions = Toolbox.gameState->getDimensions();
+    for (int i = 0; i < dimensions.x; i ++) {
+        for (int j = 0; j < dimensions.y; j ++) {
             Toolbox.gameState->getTile(i*32,j*32)->draw();
         }
     }
 
-    for (int j = 0; j < 25; j++) {
-        for(int i = 0; i < 16; i ++) {
+    for (int j = 0; j < dimensions.x; j++) {
+        for(int i = 0; i < dimensions.y; i ++) {
             Toolbox.window.draw(*Toolbox.mines[j][i].getSprite());
         }
     }
@@ -107,6 +109,7 @@ void toggleDebugMode() {
     Toolbox& toolbox = Toolbox::getInstance();
     bool debug = toolbox.debugMode;
 
+    //sets the transparency of the mines depending on if debug mode is now on or not
     if (!debug) {
         Toolbox::getInstance().debugMode = true;
         for (int i = 0; i < toolbox.gameState->getDimensions().x; i++) {
@@ -123,7 +126,6 @@ void toggleDebugMode() {
             }
         }
     }
-
 }
 
 //returns which state debug mode is in
@@ -141,7 +143,7 @@ void lost() {
     toolbox.window.clear(sf::Color(255,255,255,255));
     render();
     toolbox.window.display();
-    Sleep(500);
+    Sleep(1000);
 
     restart();
 }

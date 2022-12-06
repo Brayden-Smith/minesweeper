@@ -28,10 +28,8 @@ public:
     void onClickLeft();
     void onClickRight();
     void draw();
-    Tile(const Tile&) = delete;
-    Tile(Tile&&) = default;
-    Tile(Tile& t); //copy constructor
-    Tile& operator= (Tile& t); //assignment operator
+    Tile(Tile& t);
+    Tile& operator= (Tile& t);
 
 
 protected:

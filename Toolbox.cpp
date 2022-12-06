@@ -1,9 +1,7 @@
 #include "Toolbox.h"
 
 
-void newGameClick() {
-    std::cout<< 2;
-}
+
 
 void test1Click() {
     std::cout<< 3;
@@ -15,7 +13,7 @@ void test2Click() {
 
 Button debug(sf::Vector2f(496 ,512), toggleDebugMode);
 
-Button newGame(sf::Vector2f(368 ,512), newGameClick);
+Button newGame(sf::Vector2f(368 ,512), restart);
 
 Button test1(sf::Vector2f(560 ,512), test1Click);
 
@@ -97,5 +95,6 @@ void Toolbox::createBoard(std::vector<std::vector<int>> _board) {
             }
         }
     }
-
 }
+
+
