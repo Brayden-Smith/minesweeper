@@ -2,8 +2,11 @@
 
 Mine::Mine(sf::Vector2f _position, bool actualMine) {
     sprite.setPosition(_position);
+    //makes it invisible
+    sprite.setColor(sf::Color(255,255,255,0));
     exists = actualMine;
 
+    //only needs a texture if it exists
     if (exists) {
         mineTexture.loadFromFile("images/mine.png");
         sprite.setTexture(mineTexture);
