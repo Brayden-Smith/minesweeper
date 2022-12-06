@@ -51,3 +51,27 @@ sf::Sprite* Mine::getSprite() {
 bool Mine::doesExist() {
     return exists;
 }
+
+void Mine::setNeighbors(std::array<Mine*, 8> _neighbors) {
+    neighbors = _neighbors;
+
+    if (!this->doesExist())
+    {
+        //counts the number of nearby mines
+        nearMines = 0;
+        for(int i = 0; i < 8; i ++) {
+            if (neighbors[i] != nullptr) {
+                if(neighbors[i]->doesExist()) {
+                    nearMines++;
+                }
+            }
+        }
+
+        if(!(nearMines == 0))
+        {
+            //leads in the correct file number then sets the sprite to look like it
+            mineTexture.loadFromFile("images/number_" + std::to_string(nearMines) + ".png");
+            sprite.setTexture(mineTexture);
+        }
+    }
+}

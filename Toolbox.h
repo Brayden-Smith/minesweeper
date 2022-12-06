@@ -25,5 +25,6 @@ public:
     static Toolbox& getInstance();
     void createBoard(std::vector<std::vector<int>> _board);
     std::array<std::array<Mine,16>, 25> mines;
+    void setMineNeighbors();
     void newGameState();
 };

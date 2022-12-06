@@ -95,6 +95,59 @@ void Toolbox::createBoard(std::vector<std::vector<int>> _board) {
             }
         }
     }
+    this->setMineNeighbors();
+}
+
+void Toolbox::setMineNeighbors() {
+    //prefills array with null pointers
+    std::array<Mine*, 8> neighbors;
+    for (int i = 0; i < 8; i++) {
+        neighbors[i] = nullptr;
+    }
+
+    //sets the neighbor of each tile
+    for (int j = 0; j < mines.size(); j++) {
+        for(int i = 0; i < mines[0].size(); i ++) {
+            //checks each corner to see if its valid then sets tiles based on that
+            //top left adjacent
+            if (j - 1 < 0 && i - 1 < 0) {
+                neighbors[0] = nullptr;
+            }
+            else {
+                neighbors[0] = &mines[j - 1][i - 1];
+                neighbors[1] = &mines[j][i - 1];
+                neighbors[3] = &mines[j - 1][i];
+            }
+            //top right corner
+            if (j + 1 > mines.size() && i - 1 < 0) {
+                neighbors[2] = nullptr;
+            }
+            else {
+                neighbors[1] = &mines[j][i - 1];
+                neighbors[2] = &mines[j + 1][i - 1];
+                neighbors[4] = &mines[j + 1][i];
+            }
+            //bottom left corner
+            if (j - 1 < 0 && i + 1 > mines[0].size()) {
+                neighbors[5] = nullptr;
+            }
+            else {
+                neighbors[3] = &mines[j - 1][i];
+                neighbors[5] = &mines[j - 1][i + 1];
+                neighbors[6] = &mines[j][i + 1];
+            }
+            //bottom right corner
+            if (j + 1 > mines.size()  && i + 1 > mines[0].size()) {
+                neighbors[7] = nullptr;
+            }
+            else {
+                neighbors[4] = &mines[j + 1][i];
+                neighbors[7] = &mines[j + 1][i + 1];
+                neighbors[6] = &mines[j][i + 1];
+            }
+            mines[j][i].setNeighbors(neighbors);
+        }
+    }
 }
 
 

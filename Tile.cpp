@@ -55,14 +55,14 @@ void Tile::setState(Tile::State _state) {
     }
 }
 
-std::array<Tile*, 8> neighbors;
-
 std::array<Tile*, 8>& Tile::getNeighbors() {
     return neighbors;
 }
 
 void Tile::setNeighbors(std::array<Tile *, 8> _neighbors) {
-
+    for(int i = 0; i < 8; i++) {
+        neighbors[i] = _neighbors[i];
+    }
 }
 
 void Tile::onClickRight() {

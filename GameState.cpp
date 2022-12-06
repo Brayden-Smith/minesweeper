@@ -20,6 +20,55 @@ GameState::GameState(sf::Vector2i _dimensions, int _numberOfMines) {
         }
     }
 
+    //prefills array with null pointers
+    std::array<Tile*, 8> neighbors;
+    for (int i = 0; i < 8; i++) {
+        neighbors[i] = nullptr;
+    }
+    //sets the neighbor of each tile
+    for (int j = 0; j < dimensions.x; j++) {
+        for(int i = 0; i < dimensions.y; i ++) {
+            //checks each corner to see if its valid then sets tiles based on that
+            //top left adjacent
+            if (j - 1 < 0 && i - 1 < 0) {
+                neighbors[0] = nullptr;
+            }
+            else {
+                neighbors[0] = &tiles[j - 1][i - 1];
+                neighbors[1] = &tiles[j][i - 1];
+                neighbors[3] = &tiles[j - 1][i];
+            }
+            if (j + 1 > dimensions.x - 1 && i - 1 < 0) {
+                neighbors[2] = nullptr;
+            }
+            //top right corner
+            else {
+                neighbors[1] = &tiles[j][i - 1];
+                neighbors[2] = &tiles[j + 1][i - 1];
+                neighbors[4] = &tiles[j + 1][i];
+            }
+            if (j - 1 < 0 && i + 1 > dimensions.y - 1) {
+                neighbors[5] = nullptr;
+            }
+            //bottom left corner
+            else {
+                neighbors[3] = &tiles[j - 1][i];
+                neighbors[5] = &tiles[j - 1][i + 1];
+                neighbors[6] = &tiles[j][i + 1];
+            }
+            //bottom right corner
+            if (j + 1 > dimensions.x - 1 && i + 1 > dimensions.y - 1) {
+                neighbors[7] = nullptr;
+            }
+            else {
+                neighbors[4] = &tiles[j + 1][i];
+                neighbors[7] = &tiles[j + 1][i + 1];
+                neighbors[6] = &tiles[j][i + 1];
+            }
+            tiles[j][i].setNeighbors(neighbors);
+        }
+    }
+
     //creates and sets the size of the mine vector
     std::vector<std::vector<int>> mineBoard;
     mineBoard = std::vector<std::vector<int>>(dimensions.x);

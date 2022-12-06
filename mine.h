@@ -6,6 +6,8 @@ class Mine
     sf::Sprite sprite;
     sf::Texture mineTexture;
     bool exists;
+    std::array<Mine*, 8> neighbors;
+    int nearMines;
 
 public:
     Mine(sf::Vector2f _position, bool actualMine);
@@ -16,4 +18,5 @@ public:
     void operator=(Mine& m);
     sf::Sprite* getSprite();
     bool doesExist();
+    void setNeighbors(std::array<Mine*, 8> _neighbors);
 };
