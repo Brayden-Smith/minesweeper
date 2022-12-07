@@ -21,15 +21,15 @@ Button test1(sf::Vector2f(560 ,512), test1Click);
 
 Button test2(sf::Vector2f(624,512), test2Click);
 
-GameState game("boards/testboard2.brd");
+GameState game;
 
 Toolbox::Toolbox() {
-   gameState = &game;
-
+    //sets some cool variables B)
+    gameState = &game;
     sf::RenderWindow window(sf::VideoMode(800,600), "P4 - Minesweeper, <Brayden Smith>");
     debugMode = false;
 
-
+    //sets all the buttons to be all set up B)
     sf::Texture texture;
     sf::Sprite sprite;
 
@@ -71,7 +71,21 @@ Toolbox::Toolbox() {
         testButton2 = &test2;
         buttons[3] = testButton2;
 
+        //intializes the counter sprites
+        digits.loadFromFile("images/digits.png");
 
+        counterSign.setPosition(0, 512);
+        counterSign.setTexture(digits);
+        counterSign.setTextureRect(sf::IntRect (210, 0 , 21, 32));
+
+        digit1.setPosition(21, 512);
+        digit1.setTexture(digits);
+
+        digit2.setPosition(42, 512);
+        digit2.setTexture(digits);
+
+        digit3.setPosition(63, 512);
+        digit3.setTexture(digits);
 }
 
 
@@ -154,4 +168,39 @@ void Toolbox::setMineNeighbors() {
     }
 }
 
+//updates the sprites and sends them out to be drawn
+std::array<sf::Sprite*, 4> Toolbox::getCounter() {
+    int mines = gameState->getMineCount();
+    int flags = gameState->getFlagCount();
+    int difference = mines - flags;
 
+    std::array<sf::Sprite*, 4> result;
+
+    //if the mine counter is negative it makes the negative sign show up
+    if (difference < 0) {
+        counterSign.setColor(sf::Color(255,255,255,255));
+    }
+    else {
+        counterSign.setColor(sf::Color(0,0,0,255));
+    }
+
+    result[0] = &counterSign;
+
+    difference = abs(difference);
+    int numOfDigit;
+    //sets the digits to the correct texture block
+    numOfDigit = (difference / 100) % 10;
+    digit1.setTextureRect(sf::IntRect(numOfDigit * 21,0,21,32));
+    result[1] = &digit1;
+
+    numOfDigit = (difference / 10) % 10;
+    digit2.setTextureRect(sf::IntRect(numOfDigit * 21,0,21,32));
+    result[2] = &digit2;
+
+
+    numOfDigit = difference % 10;
+    digit3.setTextureRect(sf::IntRect(numOfDigit * 21,0,21,32));
+    result[3] = &digit3;
+
+    return result;
+}

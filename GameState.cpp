@@ -651,7 +651,7 @@ int GameState::getMineCount() {
 //returns number of flags on the board
 int GameState::getFlagCount() {
     //look through each tile to see if flagged then return num
-    int flags;
+    int flags = 0;
     for (int j = 0; j < dimensions.x; j++) {
         for(int i = 0; i < dimensions.y; i ++) {
             if (tiles[j][i].getState() == Tile::FLAGGED) {
@@ -659,6 +659,7 @@ int GameState::getFlagCount() {
             }
         }
     }
+
     return flags;
 }
 

@@ -3,14 +3,21 @@
 //checks every tile to see if none mine spots have revealed tiles
 bool winCheck() {
     Toolbox& toolbox = Toolbox::getInstance();
+
+    //gathers the number of hidden tiles
+    int hiddenTiles = 0;
     for (int j = 0; j < toolbox.gameState->getDimensions().x; j++) {
         for(int i = 0; i < toolbox.gameState->getDimensions().y; i ++) {
-            if(!toolbox.mines[j][i].doesExist() && toolbox.gameState->getTile(j,i)->getState() != Tile::REVEALED) {
-                return false;
+            if (toolbox.gameState->getTile(j*32,i*32)->getState() == Tile::HIDDEN) {
+                hiddenTiles++;
             }
         }
     }
-    return true;
+
+    if (hiddenTiles == toolbox.gameState->getMineCount()) {
+        return true;
+    }
+    return false;
 }
 
 //changes the face to win face then resets after some time
@@ -77,7 +84,9 @@ int launch() {
             }
         }
 
-
+        if(winCheck()) {
+            won();
+        }
 
         //clear the window to render new frame
         Toolbox.window.clear(sf::Color(255,255,255,255));
@@ -112,12 +121,15 @@ void restart() {
 
 //renders the current game state
 void render() {
+
+    //draws each button
     Toolbox& Toolbox = Toolbox::getInstance();
     for (int i = 0; i < 4; i++)
     {
         Toolbox.window.draw(*Toolbox.buttons[i]->getSprite());
     }
 
+    //draws each tile
     sf::Vector2i dimensions = Toolbox.gameState->getDimensions();
     for (int i = 0; i < dimensions.x; i ++) {
         for (int j = 0; j < dimensions.y; j ++) {
@@ -125,6 +137,7 @@ void render() {
         }
     }
 
+    //draws each mine
     for (int j = 0; j < dimensions.x; j++) {
         for(int i = 0; i < dimensions.y; i ++) {
             if (Toolbox.mines[j][i].isDrawn) {
@@ -132,6 +145,14 @@ void render() {
             }
         }
     }
+
+    //draws each counter sprite
+    std::array<sf::Sprite*, 4> counter = Toolbox.getCounter();
+    for (int i = 0; i < 4; i ++) {
+        Toolbox.window.draw(*counter[i]);
+    }
+
+
 }
 
 //looks at if debug mode and swaps its value

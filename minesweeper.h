@@ -1,5 +1,6 @@
 #pragma once
 #include "Toolbox.h"
+#include "Tile.h"
 #include <vector>
 #include <windows.h>
 

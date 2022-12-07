@@ -13,6 +13,7 @@ class Toolbox
     Toolbox();
     std::vector<std::vector<int>> board;
     std::array<Mine*, 8> neighbors;
+    sf::Texture digits;
 
 public:
     sf::RenderWindow window;
@@ -29,4 +30,9 @@ public:
     std::array<std::array<Mine,16>, 25> mines;
     void setMineNeighbors();
 
+    std::array<sf::Sprite*, 4> getCounter();
+    sf::Sprite counterSign;
+    sf::Sprite digit1;
+    sf::Sprite digit2;
+    sf::Sprite digit3;
 };
