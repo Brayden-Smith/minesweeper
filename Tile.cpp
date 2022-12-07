@@ -1,5 +1,6 @@
 #include "Tile.h"
 
+//constructs it not much going on here
 Tile::Tile(sf::Vector2f position) {
     sprite.setPosition(position);
     flag.setPosition(position);
@@ -13,20 +14,24 @@ Tile::Tile(sf::Vector2f position) {
     state = HIDDEN;
 }
 
+//default constructor
 Tile::Tile() {
     sprite.setPosition(sf::Vector2f(0,0));
     flag.setPosition(sf::Vector2f(0,0));
     state = HIDDEN;
 }
 
+//returns the position of the tile
 sf::Vector2f Tile::getLocation() {
     return sprite.getPosition();
 }
 
+//returns state of the tile
 Tile::State Tile::getState() {
     return state;
 }
 
+//changes the state and texture to the state that is passed in
 void Tile::setState(Tile::State _state) {
     state = _state;
 
@@ -55,17 +60,19 @@ void Tile::setState(Tile::State _state) {
     }
 }
 
+//returns the neighbors of the tile
 std::array<Tile*, 8>& Tile::getNeighbors() {
     return neighbors;
 }
 
+//sets the neighbors variable to whats passed in
 void Tile::setNeighbors(std::array<Tile *, 8> _neighbors) {
-    for(int i = 0; i < 8; i++) {
-        neighbors[i] = _neighbors[i];
-    }
+        neighbors = _neighbors;
 }
 
+//the logic what happens when a tile is right clicked
 void Tile::onClickRight() {
+    //if its hidden it sets to flagged and vice versa
     if (state == HIDDEN) {
         this->setState(Tile::State (2));
     }
@@ -74,6 +81,7 @@ void Tile::onClickRight() {
     }
 }
 
+//the logic that happens when a tile is left clicked
 void Tile::onClickLeft() {
     Toolbox& toolbox = Toolbox::getInstance();
     if (state == HIDDEN)
@@ -85,11 +93,18 @@ void Tile::onClickLeft() {
         }
         else
         {
+            //reveals the number underneath then reveals neighbors if there are no near mines
             this->setState(REVEALED);
+            toolbox.mines[sprite.getPosition().x /32][sprite.getPosition().y /32].setColor(sf::Color(255,255,255,255));
+            if (toolbox.mines[sprite.getPosition().x /32][sprite.getPosition().y /32].getNearMines() == 0)
+            {
+                this->revealNeighbors();
+            }
         }
     }
 }
 
+//renders the tile and flag if it is toggled
 void Tile::draw() {
     Toolbox& Toolbox = Toolbox::getInstance();
     Toolbox.window.draw(sprite);
@@ -98,10 +113,12 @@ void Tile::draw() {
     }
 }
 
+//copy constructor :(
 Tile::Tile(Tile& t) {
     sprite.setPosition(t.getLocation());
     flag.setPosition(sprite.getPosition());
 
+    state = t.getState();
     texture.loadFromFile("images/tile_hidden.png");
     sprite.setTexture(texture);
 
@@ -109,10 +126,12 @@ Tile::Tile(Tile& t) {
     flag.setTexture(flagTexture);
 }
 
+//assignment operator overloader
 Tile& Tile::operator=(Tile &t) {
     sprite.setPosition(t.getLocation());
     flag.setPosition(sprite.getPosition());
 
+    state = t.getState();
     texture.loadFromFile("images/tile_hidden.png");
     sprite.setTexture(texture);
 
@@ -121,4 +140,20 @@ Tile& Tile::operator=(Tile &t) {
 
     this->setState(t.getState());
     return *this;
+}
+
+//makes sure that they are hidden and don
+void Tile::revealNeighbors() {
+    Toolbox& toolbox = Toolbox::getInstance();
+    //checks adjacent tiles to see if they are hidden and dont have a bomb
+    for(int i = 0; i < 8; i++)
+    {
+        if (neighbors[i] != nullptr && neighbors[i]->getState() == HIDDEN)
+        {
+            if (!toolbox.mines[neighbors[i]->getLocation().x / 32][neighbors[i]->getLocation().y / 32].doesExist())
+            {
+                neighbors[i]->onClickLeft();
+            }
+        }
+    }
 }

@@ -114,7 +114,10 @@ void toggleDebugMode() {
         Toolbox::getInstance().debugMode = true;
         for (int i = 0; i < toolbox.gameState->getDimensions().x; i++) {
             for (int j = 0; j < toolbox.gameState->getDimensions().y; j++) {
-                toolbox.mines[i][j].setColor(sf::Color(255,255,255, 255));
+                if(toolbox.mines[i][j].doesExist())
+                {
+                    toolbox.mines[i][j].setColor(sf::Color(255, 255, 255, 255));
+                }
             }
         }
     }
@@ -122,7 +125,10 @@ void toggleDebugMode() {
         Toolbox::getInstance().debugMode = false;
         for (int i = 0; i < toolbox.gameState->getDimensions().x; i++) {
             for (int j = 0; j < toolbox.gameState->getDimensions().y; j++) {
-                toolbox.mines[i][j].setColor(sf::Color(0,0,0, 0));
+                if(toolbox.mines[i][j].doesExist())
+                {
+                    toolbox.mines[i][j].setColor(sf::Color(255, 255, 255, 0));
+                }
             }
         }
     }

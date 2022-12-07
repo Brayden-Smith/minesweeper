@@ -67,11 +67,15 @@ void Mine::setNeighbors(std::array<Mine*, 8> _neighbors) {
             }
         }
 
-        if(!(nearMines == 0))
+        if(nearMines != 0)
         {
             //leads in the correct file number then sets the sprite to look like it
             mineTexture.loadFromFile("images/number_" + std::to_string(nearMines) + ".png");
             sprite.setTexture(mineTexture);
         }
     }
+}
+
+int Mine::getNearMines() {
+    return nearMines;
 }

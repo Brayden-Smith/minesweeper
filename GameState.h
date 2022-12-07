@@ -15,6 +15,7 @@ private:
     int numberofmines;
     std::vector<std::vector<Tile>> tiles;
     PlayStatus status;
+    std::array<Tile*, 8> neighbors;
 public:
     GameState(sf::Vector2i _dimensions = sf::Vector2i(25,16), int _numberOfMines = 50);
     GameState(const char* filepath);

@@ -12,6 +12,7 @@ class Toolbox
 
     Toolbox();
     std::vector<std::vector<int>> board;
+    std::array<Mine*, 8> neighbors;
 
 public:
     sf::RenderWindow window;

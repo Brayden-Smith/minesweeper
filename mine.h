@@ -19,4 +19,5 @@ public:
     sf::Sprite* getSprite();
     bool doesExist();
     void setNeighbors(std::array<Mine*, 8> _neighbors);
+    int getNearMines();
 };

@@ -99,18 +99,19 @@ void Toolbox::createBoard(std::vector<std::vector<int>> _board) {
 }
 
 void Toolbox::setMineNeighbors() {
-    //prefills array with null pointers
-    std::array<Mine*, 8> neighbors;
-    for (int i = 0; i < 8; i++) {
-        neighbors[i] = nullptr;
-    }
 
     //sets the neighbor of each tile
-    for (int j = 0; j < mines.size(); j++) {
-        for(int i = 0; i < mines[0].size(); i ++) {
+    for (int j = 0; j < gameState->getDimensions().x; j++) {
+        for(int i = 0; i < gameState->getDimensions().y; i ++) {
+
+            //prefills array with null pointers
+            for (int i = 0; i < 8; i++) {
+                neighbors[i] = nullptr;
+            }
+
             //checks each corner to see if its valid then sets tiles based on that
             //top left adjacent
-            if (j - 1 < 0 && i - 1 < 0) {
+            if (j - 1 < 0  || i - 1 < 0) {
                 neighbors[0] = nullptr;
             }
             else {
@@ -119,7 +120,7 @@ void Toolbox::setMineNeighbors() {
                 neighbors[3] = &mines[j - 1][i];
             }
             //top right corner
-            if (j + 1 > mines.size() && i - 1 < 0) {
+            if (j + 1 > gameState->getDimensions().x - 1 || i - 1 < 0) {
                 neighbors[2] = nullptr;
             }
             else {
@@ -128,7 +129,7 @@ void Toolbox::setMineNeighbors() {
                 neighbors[4] = &mines[j + 1][i];
             }
             //bottom left corner
-            if (j - 1 < 0 && i + 1 > mines[0].size()) {
+            if (j - 1 < 0 || i + 1 > gameState->getDimensions().y - 1 ) {
                 neighbors[5] = nullptr;
             }
             else {
@@ -137,7 +138,7 @@ void Toolbox::setMineNeighbors() {
                 neighbors[6] = &mines[j][i + 1];
             }
             //bottom right corner
-            if (j + 1 > mines.size()  && i + 1 > mines[0].size()) {
+            if (j + 1 > gameState->getDimensions().x - 1 || i + 1 > gameState->getDimensions().y - 1) {
                 neighbors[7] = nullptr;
             }
             else {
@@ -145,6 +146,7 @@ void Toolbox::setMineNeighbors() {
                 neighbors[7] = &mines[j + 1][i + 1];
                 neighbors[6] = &mines[j][i + 1];
             }
+
             mines[j][i].setNeighbors(neighbors);
         }
     }
