@@ -10,3 +10,5 @@ void render();
 void toggleDebugMode();
 bool getDebugMode();
 void lost();
+bool winCheck();
+void won();

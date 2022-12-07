@@ -5,6 +5,8 @@
 #include "Tile.h"
 class Tile;
 #include <time.h>
+#include <iostream>
+#include <string>
 
 class GameState
 {
@@ -25,4 +27,5 @@ public:
     Tile* getTile(int x, int y);
     PlayStatus getPlayStatus();
     void setPlayStatus(PlayStatus _status);
+    void operator=(GameState& g);
 };

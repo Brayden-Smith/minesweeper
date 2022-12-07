@@ -4,11 +4,13 @@
 
 
 void test1Click() {
-    std::cout<< 3;
+    Toolbox& toolbox = Toolbox::getInstance();
+    toolbox.gameState->setPlayStatus(GameState::LOSS);
 }
 
 void test2Click() {
-    std::cout<< 4;
+    Toolbox& toolbox = Toolbox::getInstance();
+    toolbox.gameState->setPlayStatus(GameState::PLAYING);
 }
 
 Button debug(sf::Vector2f(496 ,512), toggleDebugMode);
@@ -19,7 +21,7 @@ Button test1(sf::Vector2f(560 ,512), test1Click);
 
 Button test2(sf::Vector2f(624,512), test2Click);
 
-GameState game;
+GameState game("boards/testboard2.brd");
 
 Toolbox::Toolbox() {
    gameState = &game;
@@ -44,8 +46,8 @@ Toolbox::Toolbox() {
 
     //creates the newGame button
         //gets the sprite from file
-        texture.loadFromFile("images/face_happy.png");
-        sprite.setTexture(texture);
+        newGameTexture.loadFromFile("images/face_happy.png");
+        sprite.setTexture(newGameTexture);
 
         newGame.setSprite(&sprite);
         newGameButton = &newGame;

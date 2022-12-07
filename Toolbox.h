@@ -20,6 +20,7 @@ public:
     Button* buttons[4];
     Button* debugButton;
     Button* newGameButton;
+    sf::Texture newGameTexture;
     Button* testButton1;
     Button* testButton2;
     bool debugMode = false;
@@ -27,5 +28,5 @@ public:
     void createBoard(std::vector<std::vector<int>> _board);
     std::array<std::array<Mine,16>, 25> mines;
     void setMineNeighbors();
-    void newGameState();
+
 };

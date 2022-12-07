@@ -1,5 +1,31 @@
 #include "minesweeper.h"
 
+//checks every tile to see if none mine spots have revealed tiles
+bool winCheck() {
+    Toolbox& toolbox = Toolbox::getInstance();
+    for (int j = 0; j < toolbox.gameState->getDimensions().x; j++) {
+        for(int i = 0; i < toolbox.gameState->getDimensions().y; i ++) {
+            if(!toolbox.mines[j][i].doesExist() && toolbox.gameState->getTile(j,i)->getState() != Tile::REVEALED) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+//changes the face to win face then resets after some time
+void won() {
+    Toolbox& toolbox = Toolbox::getInstance();
+
+    toolbox.newGameTexture.loadFromFile("images/face_win.png");
+    toolbox.buttons[1]->getSprite()->setTexture(toolbox.newGameTexture);
+
+    //draws finale frame then waits a bit before restarting
+    toolbox.window.clear(sf::Color(255,255,255,255));
+    render();
+    toolbox.window.display();
+}
+
 int launch() {
 
     //recreates the window and creates the gameState
@@ -34,7 +60,7 @@ int launch() {
                     //if the left click is on a tile it calls that tiles left click function
                     Tile* tilePntr = Toolbox.gameState->getTile(mousePosition.x, mousePosition.y);
 
-                    if (!(tilePntr == nullptr)) {
+                    if (tilePntr != nullptr) {
                         tilePntr->onClickLeft();
                     }
                 }
@@ -51,6 +77,8 @@ int launch() {
             }
         }
 
+
+
         //clear the window to render new frame
         Toolbox.window.clear(sf::Color(255,255,255,255));
 
@@ -64,7 +92,7 @@ int launch() {
     return 0;
 }
 
-sf::Texture texture;
+
 //resets all objects, generates a default game state and turns off debug mode
 void restart() {
     Toolbox& toolbox = Toolbox::getInstance();
@@ -75,11 +103,11 @@ void restart() {
     }
 
     //resets the reset buttons smile :)
-    texture.loadFromFile("images/face_happy.png");
-    toolbox.buttons[1]->getSprite()->setTexture(texture);
+    toolbox.newGameTexture.loadFromFile("images/face_happy.png");
+    toolbox.buttons[1]->getSprite()->setTexture(toolbox.newGameTexture);
 
     //resets gamestate
-    //toolbox.gameState = &restartGame;
+    toolbox.gameState->setPlayStatus(GameState::WIN);
 }
 
 //renders the current game state
@@ -99,7 +127,9 @@ void render() {
 
     for (int j = 0; j < dimensions.x; j++) {
         for(int i = 0; i < dimensions.y; i ++) {
-            Toolbox.window.draw(*Toolbox.mines[j][i].getSprite());
+            if (Toolbox.mines[j][i].isDrawn) {
+                Toolbox.window.draw(*Toolbox.mines[j][i].getSprite());
+            }
         }
     }
 }
@@ -141,15 +171,13 @@ bool getDebugMode() {
 
 void lost() {
     Toolbox& toolbox = Toolbox::getInstance();
-    sf::Texture texture;
-    texture.loadFromFile("images/face_lose.png");
-    toolbox.buttons[1]->getSprite()->setTexture(texture);
+
+    toolbox.newGameTexture.loadFromFile("images/face_lose.png");
+    toolbox.buttons[1]->getSprite()->setTexture(toolbox.newGameTexture);
 
     //draws finale frame then waits a bit before restarting
     toolbox.window.clear(sf::Color(255,255,255,255));
     render();
     toolbox.window.display();
-    Sleep(1000);
 
-    restart();
 }

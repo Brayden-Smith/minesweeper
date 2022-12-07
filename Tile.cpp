@@ -56,6 +56,8 @@ void Tile::setState(Tile::State _state) {
             texture.loadFromFile("images/tile_revealed.png");
             sprite.setTexture(texture);
             flagToggle = false;
+            Toolbox& toolbox = Toolbox::getInstance();
+            toolbox.mines[sprite.getPosition().x /32][sprite.getPosition().y /32].setColor(sf::Color(255,255,255,255));
             lost();
     }
 }
